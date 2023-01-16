@@ -1172,10 +1172,10 @@
   dependencies:
     glob "7.1.7"
 
-"@next/font@13.1.1":
-  version "13.1.1"
-  resolved "https://registry.yarnpkg.com/@next/font/-/font-13.1.1.tgz#a0cb38bf8a181560f195d82f13f9f92fd0b0dd20"
-  integrity sha512-amygRorS05hYK1/XQRZo5qBl7l2fpHnezeKU/cNveWU5QJg+sg8gMGkUXHtvesNKpiKIJshBRH1TzvO+2sKpvQ==
+"@next/font@^13.1.2":
+  version "13.1.2"
+  resolved "https://registry.yarnpkg.com/@next/font/-/font-13.1.2.tgz#ee809ca03113d0e73495ac5d0e2a978885d0d97e"
+  integrity sha512-NXGXGFGiOKEnvBIHq9cdFTKbHO2/4B3Zd9K27M7j1DioIQVar7oVRqZMYs0h3XMVEZLwjjkdAtqRPCzzd3RtXg==
 
 "@next/swc-android-arm-eabi@13.1.1":
   version "13.1.1"
@@ -1677,6 +1677,11 @@ cosmiconfig@^7.0.0:
     parse-json "^5.0.0"
     path-type "^4.0.0"
     yaml "^1.10.0"
+
+cropperjs@^1.5.12:
+  version "1.5.13"
+  resolved "https://registry.yarnpkg.com/cropperjs/-/cropperjs-1.5.13.tgz#eb1682f01d17c70ed5244317091d745c9a249ef8"
+  integrity sha512-by7jKAo73y5/Do0K6sxdTKHgndY0NMjG2bEdgeJxycbcmHuCiMXqw8sxy5C5Y5WTOTcDGmbT7Sr5CgKOXR06OA==
 
 cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
@@ -3000,6 +3005,13 @@ react-clientside-effect@^1.2.6:
   integrity sha512-XGGGRQAKY+q25Lz9a/4EPqom7WRjz3z9R2k4jhVKA/puQFH/5Nt27vFZYql4m4NVNdUvX8PS3O7r/Zzm7cjUlg==
   dependencies:
     "@babel/runtime" "^7.12.13"
+
+react-cropper@^2.1.8:
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/react-cropper/-/react-cropper-2.1.8.tgz#bf35a7de65769f8ad357e8ae884e791fe3fe9212"
+  integrity sha512-QEj6CE9et/gMRqpaKMgZQdBgtzLjjq+zj1pmHwtoWG6GqscDl4QpTwoEElWN2pieYxkwFaZa0lPiD2b9nwqLKQ==
+  dependencies:
+    cropperjs "^1.5.12"
 
 react-dom@18.2.0:
   version "18.2.0"
