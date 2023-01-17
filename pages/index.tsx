@@ -1,10 +1,11 @@
 import Head from 'next/head'
 import {ReactNode, RefObject, useEffect, useRef, useState} from 'react'
-import {Flex, Input, Text, Box, Button, Spacer, Spinner, Circle, HStack} from '@chakra-ui/react'
+import {Flex, Input, Text, Box, Spacer, Spinner, Circle, HStack} from '@chakra-ui/react'
 import Image from 'next/image'
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import {createWorker} from 'tesseract.js';
+import { Button } from '@/components/button'
 
 export async function getStaticProps() {
   const response = await fetch("https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena/", {
@@ -106,7 +107,7 @@ const ResultContent = ({file, onBack, drawn}: ResultContentProps) => {
                     Resultados
                 </Text>
                 <Spacer />
-                <LotteryButton label="Voltar" onClick={() => onBack()} />
+                <Button label="Voltar" onClick={() => onBack()} />
             </HStack>
             {ocr.map((game, index) => <Game key={index} game={game} prefix={String.fromCharCode(index + 65)} drawn={drawn} />)}
         </BaseBackground>)
@@ -211,7 +212,7 @@ const HomeContent = ({inputRef, contest}: HomeContentProps) => {
             >
                 Concurso {contest}
             </Text>
-            <LotteryButton label="Verificar agora!" onClick={() => inputRef?.current?.click()} />
+            <Button label="Verificar agora!" onClick={() => inputRef?.current?.click()} />
         </Flex>
     )
 }
@@ -238,37 +239,8 @@ const CropContent = ({file, setCropped}: CropContentProps) => {
                 ref={cropperRef}
             />
             <Spacer />
-            <LotteryButton label="Confirmar" onClick={onClick} />
+            <Button label="Confirmar" onClick={onClick} />
         </Flex>
     )
 }
 
-type LotteryButtonProps = {
-    label: string
-    onClick: () => void
-}
-
-const LotteryButton = ({label, onClick}: LotteryButtonProps) => {
-    return (
-        <Button
-            h='3rem'
-            maxW="315px"
-            fontSize='1.2rem'
-            fontWeight="400"
-            as='a'
-            size='lg'
-            bgGradient="linear(to-b, #fda917, #fc8f01)"
-            color="#fff"
-            borderColor="#9f6705"
-            borderWidth="1px"
-            borderRadius="0px"
-            _hover={{
-                borderColor: "#6c4105",
-                bgGradient: "linear(to-b, #ffb32d, #ff9a00)"
-            }}
-            onClick={onClick}
-        >
-            {label}
-        </Button>
-    )
-}
