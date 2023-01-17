@@ -1,27 +1,29 @@
 import Head from 'next/head'
-import {ReactNode, RefObject, useEffect, useRef, useState} from 'react'
+import {RefObject, useEffect, useRef, useState} from 'react'
 import {Flex, Input, Text, Box, Spacer, Spinner, Circle, HStack} from '@chakra-ui/react'
 import Image from 'next/image'
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import {createWorker} from 'tesseract.js';
-import { Button } from '@/components/button'
+import {Button} from '@/components/button'
+import {Panel} from '@/components/panel';
 
 export async function getStaticProps() {
-  const response = await fetch("https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena/", {
+    const response = await fetch("https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena/", {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
-        }})
-  const result = await response.json()
+        }
+    })
+    const result = await response.json()
 
-  return {
-    props: {
-        contest: result.numero,
-        drawn: result.listaDezenas
-    },
-    revalidate: 1000
-  }
+    return {
+        props: {
+            contest: result.numero,
+            drawn: result.listaDezenas
+        },
+        revalidate: 1000
+    }
 }
 
 type HomeProps = {
@@ -101,7 +103,7 @@ const ResultContent = ({file, onBack, drawn}: ResultContentProps) => {
     }
 
     return (
-        <BaseBackground>
+        <Panel>
             <HStack width="90%" mt="10px" borderColor="#8F8F8F" borderBottom="1px solid">
                 <Text fontWeight="600" color="#006BAE" fontSize="32px" px="10px">
                     Resultados
@@ -110,7 +112,7 @@ const ResultContent = ({file, onBack, drawn}: ResultContentProps) => {
                 <Button label="Voltar" onClick={() => onBack()} />
             </HStack>
             {ocr.map((game, index) => <Game key={index} game={game} prefix={String.fromCharCode(index + 65)} drawn={drawn} />)}
-        </BaseBackground>)
+        </Panel>)
 }
 
 type GameProps = {
@@ -131,14 +133,14 @@ const Game = ({game, prefix, drawn}: GameProps) => {
                     {n}
                 </Circle>)
             })}
-            { acertos > 3 && <Text minW="50px" fontWeight="600" color="#006BAE" fontSize="36px" px="10px" textAlign="center">{acertos} acertos</Text>}
+            {acertos > 3 && <Text minW="50px" fontWeight="600" color="#006BAE" fontSize="36px" px="10px" textAlign="center">{acertos} acertos</Text>}
         </HStack>
     )
 }
 
 const HowToContent = () => {
     return (
-        <BaseBackground>
+        <Panel>
             <Box width="90%" mt="10px" borderColor="#8F8F8F" borderBottom="1px solid">
                 <Text fontWeight="600" color="#006BAE" fontSize="36px" px="10px">
                     Como usar?
@@ -149,40 +151,12 @@ const HowToContent = () => {
             </Text>
             <Image src="/howto.png" height="300" width="700" alt="Imagem exemplo" />
             <Flex m="10px" flexDir="column-reverse" height="100%">
-                <Button
-                    h='3rem'
-                    maxW="315px"
-                    fontSize='1.2rem'
-                    fontWeight="400"
-                    as='a'
-                    size='lg'
-                    bgGradient="linear(to-b, #fda917, #fc8f01)"
-                    color="#fff"
-                    borderColor="#9f6705"
-                    borderWidth="1px"
-                    borderRadius="0px"
-                    _hover={{
-                        borderColor: "#6c4105",
-                        bgGradient: "linear(to-b, #ffb32d, #ff9a00)"
-                    }}
-                >
-                    Vamos lá!
-                </Button>
+                <Button onClick={() => null} label='Vamos lá!' />
             </Flex>
-        </BaseBackground>
+        </Panel>
     )
 }
 
-type BaseBackgroundProps = {
-    children: ReactNode
-}
-const BaseBackground = ({children}: BaseBackgroundProps) => {
-    return (
-        <Flex alignItems="center" flexDir="column" borderRadius="50px" bgColor="#D9D9D9" width="80%" height="70%">
-            {children}
-        </Flex>
-    )
-}
 
 type HomeContentProps = {
     contest: number
