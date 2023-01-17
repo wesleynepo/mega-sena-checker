@@ -16,19 +16,19 @@ export async function getStaticProps() {
 
   return {
     props: {
-        concurso: result.numero,
-        sorteados: result.listaDezenas
+        contest: result.numero,
+        drawn: result.listaDezenas
     },
     revalidate: 1000
   }
 }
 
 type HomeProps = {
-    concurso: number,
-    sorteados: string[]
+    contest: number,
+    drawn: string[]
 }
 
-export default function Home({concurso, sorteados}: HomeProps) {
+export default function Home({contest, drawn}: HomeProps) {
     const inputFile = useRef(null)
     const [file, setFile] = useState<string>("")
     const [fileCropped, setFileCropped] = useState<string>("")
@@ -60,7 +60,7 @@ export default function Home({concurso, sorteados}: HomeProps) {
                 >
                     <Input ref={inputFile} type="file" onChange={handleFileChange} hidden />
                     <Flex height="100%" alignItems="center" display="flex" justifyContent="center">
-                        {fileCropped.length > 0 ? <ResultContent file={fileCropped} onBack={clearAll} sorteados={sorteados} /> : file.length > 0 ? <CropContent file={file} setCropped={setFileCropped} /> : <HomeContent inputRef={inputFile} concurso={concurso} />}
+                        {fileCropped.length > 0 ? <ResultContent file={fileCropped} onBack={clearAll} drawn={drawn} /> : file.length > 0 ? <CropContent file={file} setCropped={setFileCropped} /> : <HomeContent inputRef={inputFile} contest={contest} />}
                     </Flex>
                 </Box>
             </main>
@@ -71,10 +71,10 @@ export default function Home({concurso, sorteados}: HomeProps) {
 type ResultContentProps = {
     file: string
     onBack: () => void
-    sorteados: string[]
+    drawn: string[]
 }
 
-const ResultContent = ({file, onBack, sorteados}: ResultContentProps) => {
+const ResultContent = ({file, onBack, drawn}: ResultContentProps) => {
     const [loading, setLoading] = useState(true)
     const [ocr, setOcr] = useState<string[][]>([])
     const doOCR = async (file: string) => {
@@ -108,23 +108,23 @@ const ResultContent = ({file, onBack, sorteados}: ResultContentProps) => {
                 <Spacer />
                 <LotteryButton label="Voltar" onClick={() => onBack()} />
             </HStack>
-            {ocr.map((game, index) => <Game key={index} game={game} prefix={String.fromCharCode(index + 65)} sorteados={sorteados} />)}
+            {ocr.map((game, index) => <Game key={index} game={game} prefix={String.fromCharCode(index + 65)} drawn={drawn} />)}
         </BaseBackground>)
 }
 
 type GameProps = {
     game: string[]
     prefix: string
-    sorteados: string[]
+    drawn: string[]
 }
 
-const Game = ({game, prefix, sorteados}: GameProps) => {
+const Game = ({game, prefix, drawn}: GameProps) => {
     let acertos = 0
     return (
         <HStack mt="5px">
             <Text minW="50px" fontWeight="600" color="#006BAE" fontSize="36px" px="10px" textAlign="center">{prefix}</Text>
             {game.map(n => {
-                var match = sorteados.includes(n)
+                var match = drawn.includes(n)
                 if (match) acertos++
                 return (<Circle key={n} color="white" size="50px" fontWeight="bold" fontSize="28px" bgColor={match ? "#006BAE" : "#5897BE"}>
                     {n}
@@ -184,11 +184,11 @@ const BaseBackground = ({children}: BaseBackgroundProps) => {
 }
 
 type HomeContentProps = {
-    concurso: number
+    contest: number
     inputRef: RefObject<HTMLInputElement>
 }
 
-const HomeContent = ({inputRef, concurso}: HomeContentProps) => {
+const HomeContent = ({inputRef, contest}: HomeContentProps) => {
     return (
         <Flex flexDir="column" alignItems="center" width="100%">
             <Text
@@ -209,7 +209,7 @@ const HomeContent = ({inputRef, concurso}: HomeContentProps) => {
                 mb='4rem'
                 letterSpacing="-0.09em"
             >
-                Concurso {concurso}
+                Concurso {contest}
             </Text>
             <LotteryButton label="Verificar agora!" onClick={() => inputRef?.current?.click()} />
         </Flex>
