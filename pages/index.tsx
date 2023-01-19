@@ -16,32 +16,17 @@ import 'cropperjs/dist/cropper.css'
 import { createWorker } from 'tesseract.js'
 import { Button } from '@/components/button'
 import { Panel } from '@/components/panel'
+import { getLatestLottery, LatestLotteryResponse } from '@/services/caixa'
 
 export async function getStaticProps() {
-  const response = await fetch(
-    'https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena/',
-    {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json'
-      }
-    }
-  )
-  const result = await response.json()
-
+  const latestLottery = getLatestLottery()
   return {
-    props: {
-      contest: result.numero,
-      drawn: result.listaDezenas
-    },
+    props: latestLottery,
     revalidate: 1000
   }
 }
 
-type HomeProps = {
-  contest: number
-  drawn: string[]
-}
+type HomeProps = LatestLotteryResponse
 
 export default function Home({ contest, drawn }: HomeProps) {
   const inputFile = useRef(null)
@@ -49,8 +34,9 @@ export default function Home({ contest, drawn }: HomeProps) {
   const [fileCropped, setFileCropped] = useState<string>('')
 
   const handleFileChange = (e: any) => {
-    if (e.target.files) {
-      const objectURL = URL.createObjectURL(e.target.files[0])
+    const target = e.target as HTMLInputElement
+    if (target.files) {
+      const objectURL = URL.createObjectURL(target.files[0])
       setFile(objectURL)
     }
   }
@@ -127,8 +113,11 @@ const ResultContent = ({ file, onBack, drawn }: ResultContentProps) => {
       .split('\n')
       .map((s) => s.match(/.{1,2}/g))
       .filter((game) => game != null)
-    console.log(output)
-    setOcr(output as any)
+
+    if (output != null) {
+      setOcr(output)
+    }
+
     setLoading(false)
   }
 
