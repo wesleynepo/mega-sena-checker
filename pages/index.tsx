@@ -178,7 +178,7 @@ const Game = ({ game, prefix, drawn }: GameProps) => {
         {prefix}
       </Text>
       {game.map((n) => {
-        var match = drawn.includes(n)
+        const match = drawn.includes(n)
         if (match) acertos++
         return (
           <Circle
