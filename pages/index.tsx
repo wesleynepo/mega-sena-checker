@@ -19,7 +19,7 @@ import { Panel } from '@/components/panel'
 import { getLatestLottery, LatestLotteryResponse } from '@/services/caixa'
 
 export async function getStaticProps() {
-  const latestLottery = getLatestLottery()
+  const latestLottery = await getLatestLottery()
   return {
     props: latestLottery,
     revalidate: 1000
@@ -115,7 +115,7 @@ const ResultContent = ({ file, onBack, drawn }: ResultContentProps) => {
       .filter((game) => game != null)
 
     if (output != null) {
-      setOcr(output)
+      setOcr(output as any)
     }
 
     setLoading(false)
