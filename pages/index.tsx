@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { RefObject, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Flex,
   Input,
@@ -10,12 +10,12 @@ import {
   Circle,
   HStack
 } from '@chakra-ui/react'
-import Image from 'next/image'
 import Cropper from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
 import { createWorker } from 'tesseract.js'
 import { Button } from '@/components/button'
 import { Panel } from '@/components/panel'
+import * as Content from '@/components/home'
 import { getLatestLottery, LatestLotteryResponse } from '@/services/caixa'
 
 export async function getStaticProps() {
@@ -80,7 +80,7 @@ export default function Home({ contest, drawn }: HomeProps) {
             ) : file.length > 0 ? (
               <CropContent file={file} setCropped={setFileCropped} />
             ) : (
-              <HomeContent inputRef={inputFile} contest={contest} />
+              <Content.Home inputRef={inputFile} contest={contest} />
             )}
           </Flex>
         </Box>
@@ -103,13 +103,12 @@ const ResultContent = ({ file, onBack, drawn }: ResultContentProps) => {
     await worker.load()
     await worker.loadLanguage('eng')
     await worker.initialize('eng')
+    await worker.setParameters({ tessedit_char_whitelist: '0123456789' })
     const {
       data: { text }
     } = await worker.recognize(file)
     const output = text
-      .replaceAll('@', '0')
       .replaceAll(' ', '')
-      .replaceAll('©', '0')
       .split('\n')
       .map((s) => s.match(/.{1,2}/g))
       .filter((game) => game != null)
@@ -206,62 +205,6 @@ const Game = ({ game, prefix, drawn }: GameProps) => {
         </Text>
       )}
     </HStack>
-  )
-}
-
-const HowToContent = () => {
-  return (
-    <Panel>
-      <Box width="90%" mt="10px" borderColor="#8F8F8F" borderBottom="1px solid">
-        <Text fontWeight="600" color="#006BAE" fontSize="36px" px="10px">
-          Como usar?
-        </Text>
-      </Box>
-      <Text color="#006BAE" fontSize="20px" p="10px">
-        Após selecionar a imagem, fazer o corte na regiào apenas com os números
-        da sorte, como na imagem abaixo:
-      </Text>
-      <Image src="/howto.png" height="300" width="700" alt="Imagem exemplo" />
-      <Flex m="10px" flexDir="column-reverse" height="100%">
-        <Button onClick={() => null} label="Vamos lá!" />
-      </Flex>
-    </Panel>
-  )
-}
-
-type HomeContentProps = {
-  contest: number
-  inputRef: RefObject<HTMLInputElement>
-}
-
-const HomeContent = ({ inputRef, contest }: HomeContentProps) => {
-  return (
-    <Flex flexDir="column" alignItems="center" width="100%">
-      <Text
-        fontSize="4rem"
-        fontFamily="heading"
-        fontWeight="700"
-        color="white"
-        mb="4rem"
-        letterSpacing="-0.09em"
-      >
-        Verificador Mega Sena
-      </Text>
-      <Text
-        fontSize="1rem"
-        fontFamily="heading"
-        fontWeight="700"
-        color="white"
-        mb="4rem"
-        letterSpacing="-0.09em"
-      >
-        Concurso {contest}
-      </Text>
-      <Button
-        label="Verificar agora!"
-        onClick={() => inputRef?.current?.click()}
-      />
-    </Flex>
   )
 }
 
