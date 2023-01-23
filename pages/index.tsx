@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { RefObject, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Flex,
   Input,
@@ -15,6 +15,7 @@ import 'cropperjs/dist/cropper.css'
 import { createWorker } from 'tesseract.js'
 import { Button } from '@/components/button'
 import { Panel } from '@/components/panel'
+import * as Content from '@/components/home'
 import { getLatestLottery, LatestLotteryResponse } from '@/services/caixa'
 
 export async function getStaticProps() {
@@ -79,7 +80,7 @@ export default function Home({ contest, drawn }: HomeProps) {
             ) : file.length > 0 ? (
               <CropContent file={file} setCropped={setFileCropped} />
             ) : (
-              <HomeContent inputRef={inputFile} contest={contest} />
+              <Content.Home inputRef={inputFile} contest={contest} />
             )}
           </Flex>
         </Box>
@@ -205,42 +206,6 @@ const Game = ({ game, prefix, drawn }: GameProps) => {
         </Text>
       )}
     </HStack>
-  )
-}
-
-type HomeContentProps = {
-  contest: number
-  inputRef: RefObject<HTMLInputElement>
-}
-
-const HomeContent = ({ inputRef, contest }: HomeContentProps) => {
-  return (
-    <Flex flexDir="column" alignItems="center" width="100%">
-      <Text
-        fontSize="4rem"
-        fontFamily="heading"
-        fontWeight="700"
-        color="white"
-        mb="4rem"
-        letterSpacing="-0.09em"
-      >
-        Verificador Mega Sena
-      </Text>
-      <Text
-        fontSize="1rem"
-        fontFamily="heading"
-        fontWeight="700"
-        color="white"
-        mb="4rem"
-        letterSpacing="-0.09em"
-      >
-        Concurso {contest}
-      </Text>
-      <Button
-        label="Verificar agora!"
-        onClick={() => inputRef?.current?.click()}
-      />
-    </Flex>
   )
 }
 
