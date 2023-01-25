@@ -2,7 +2,6 @@ import Head from 'next/head'
 import { useEffect, useRef, useState } from 'react'
 import {
   Flex,
-  Input,
   Text,
   Box,
   Spacer,
@@ -33,19 +32,21 @@ export default function Home({ contest, drawn }: HomeProps) {
   const [file, setFile] = useState<string>('')
   const [fileCropped, setFileCropped] = useState<string>('')
 
-  const handleFileChange = (e: any) => {
-    const target = e.target as HTMLInputElement
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.currentTarget
     if (target.files) {
       const objectURL = URL.createObjectURL(target.files[0])
       setFile(objectURL)
     }
+    e.currentTarget.value = ''
   }
 
   const clearAll = () => {
+    URL.revokeObjectURL(file)
     setFile('')
     setFileCropped('')
-    // TODO: Should take care of memory leaking soon
   }
+
   return (
     <>
       <Head>
@@ -59,7 +60,7 @@ export default function Home({ contest, drawn }: HomeProps) {
           background="linear-gradient(135deg, #0065B7 0%, #0065B7 50%, #0581B4 50%, #35B7AF 100%)"
           height="100vh"
         >
-          <Input
+          <input
             ref={inputFile}
             type="file"
             onChange={handleFileChange}
