@@ -1,12 +1,10 @@
 import Head from 'next/head'
 import { useRef, useState } from 'react'
-import { Flex, Box, Spacer } from '@chakra-ui/react'
-import Cropper from 'react-cropper'
-import 'cropperjs/dist/cropper.css'
-import { Button } from '@/components/button'
+import { Flex, Box } from '@chakra-ui/react'
 import * as Content from '@/components/home'
 import { getLatestLottery, LatestLotteryResponse } from '@/services/caixa'
 import { Result } from '@/components/result'
+import { Crop } from '@/components/crop'
 
 export async function getStaticProps() {
   const latestLottery = await getLatestLottery()
@@ -66,7 +64,7 @@ export default function Home({ contest, drawn }: HomeProps) {
             {fileCropped.length > 0 ? (
               <Result file={fileCropped} onBack={clearAll} drawn={drawn} />
             ) : file.length > 0 ? (
-              <CropContent file={file} setCropped={setFileCropped} />
+              <Crop file={file} setCropped={setFileCropped} />
             ) : (
               <Content.Home inputRef={inputFile} contest={contest} />
             )}
@@ -74,32 +72,5 @@ export default function Home({ contest, drawn }: HomeProps) {
         </Box>
       </main>
     </>
-  )
-}
-
-type CropContentProps = {
-  file: string
-  setCropped: (file: string) => void
-}
-
-const CropContent = ({ file, setCropped }: CropContentProps) => {
-  const cropperRef = useRef<HTMLImageElement>(null)
-  const onClick = () => {
-    const imageElement: any = cropperRef?.current
-    const cropper: any = imageElement?.cropper
-    setCropped(cropper.getCroppedCanvas().toDataURL())
-  }
-
-  return (
-    <Flex alignItems="center" flexDir="column" height="90%">
-      <Cropper
-        src={file}
-        style={{ height: '80%' }}
-        guides={false}
-        ref={cropperRef}
-      />
-      <Spacer />
-      <Button label="Confirmar" onClick={onClick} />
-    </Flex>
   )
 }

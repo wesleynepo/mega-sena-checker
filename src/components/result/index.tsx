@@ -1,8 +1,8 @@
+import { Game, handleGame } from '@/services/game-check'
 import { HStack, Spacer, Spinner, Text } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { createWorker } from 'tesseract.js'
 import { Button } from '../button'
-import { Game } from '../game'
+import { GameResult } from '../game'
 import { Panel } from '../panel'
 
 type ResultProps = {
@@ -12,37 +12,18 @@ type ResultProps = {
 }
 
 export const Result = ({ file, onBack, drawn }: ResultProps) => {
-  const [loading, setLoading] = useState(true)
-  const [ocr, setOcr] = useState<string[][]>([])
-  const doOCR = async (file: string) => {
-    const worker = await createWorker()
-    await worker.load()
-    await worker.loadLanguage('eng')
-    await worker.initialize('eng')
-    await worker.setParameters({ tessedit_char_whitelist: '0123456789' })
-    const {
-      data: { text }
-    } = await worker.recognize(file)
-    const output = text
-      .replaceAll(' ', '')
-      .split('\n')
-      .map((s) => s.match(/.{1,2}/g))
-      .filter((game) => game != null)
+  const [games, setGames] = useState<Game[]>()
 
-    if (output != null) {
-      setOcr(output as any)
-    }
-
-    setLoading(false)
+  const handler = async () => {
+    const games = await handleGame(file, drawn)
+    setGames(games)
   }
 
   useEffect(() => {
-    if (file) {
-      doOCR(file)
-    }
+    handler()
   }, [file])
 
-  if (loading) {
+  if (games === undefined) {
     return <Spinner color="white" size="xl" />
   }
 
@@ -60,13 +41,8 @@ export const Result = ({ file, onBack, drawn }: ResultProps) => {
         <Spacer />
         <Button label="Voltar" onClick={() => onBack()} />
       </HStack>
-      {ocr.map((game, index) => (
-        <Game
-          key={index}
-          game={game}
-          prefix={String.fromCharCode(index + 65)}
-          drawn={drawn}
-        />
+      {games.map((game) => (
+        <GameResult key={game.prefix} game={game} />
       ))}
     </Panel>
   )

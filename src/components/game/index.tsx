@@ -1,13 +1,12 @@
+import { Game } from '@/services/game-check'
 import { Circle, HStack, Text } from '@chakra-ui/react'
 
-type GameProps = {
-  game: string[]
-  prefix: string
-  drawn: string[]
+type GameResultProps = {
+  game: Game
 }
 
-export const Game = ({ game, prefix, drawn }: GameProps) => {
-  let acertos = 0
+export const GameResult = ({ game }: GameResultProps) => {
+  const { prefix, winningCounts, plays } = game
   return (
     <HStack mt="5px">
       <Text
@@ -20,23 +19,21 @@ export const Game = ({ game, prefix, drawn }: GameProps) => {
       >
         {prefix}
       </Text>
-      {game.map((n) => {
-        const match = drawn.includes(n)
-        if (match) acertos++
+      {plays.map(({ guess, drawn }) => {
         return (
           <Circle
-            key={n}
+            key={guess}
             color="white"
             size="50px"
             fontWeight="bold"
             fontSize="28px"
-            bgColor={match ? '#006BAE' : '#5897BE'}
+            bgColor={drawn ? '#006BAE' : '#5897BE'}
           >
-            {n}
+            {guess}
           </Circle>
         )
       })}
-      {acertos > 3 && (
+      {winningCounts > 3 && (
         <Text
           minW="50px"
           fontWeight="600"
@@ -45,7 +42,7 @@ export const Game = ({ game, prefix, drawn }: GameProps) => {
           px="10px"
           textAlign="center"
         >
-          {acertos} acertos
+          {winningCounts} acertos
         </Text>
       )}
     </HStack>
