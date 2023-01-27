@@ -1,36 +1,15 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Verificador da Mega Sena
 
-## Getting Started
+Esse projeto nasceu de uma conversa com amigos pós sorteio da MEGA da VIRADA, com a grande quantidade de cupons e somente as fotos deles pensei, seria uma boa ideia um webapp que fizesse esse papel de escanear o comprovante e baseado no último concurso disponível fazer a contagem de acertos.
 
-First, run the development server:
+## Conceito
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+Utilizei o NextJS pela familiaridade e porque já previa um possível problema, como obter os dados sem fazer diversas consultas, não quis deixar a responsabilidade de fazer a consulta na API da Caixa no client-side, entào usei o ISR do NextJS para funcionar como um cache pra esses dados, sendo revalidados a cada 10 minutos.
+O app em si é simples, ele usa o Tesseract.JS como bibliotéca para OCR que escaneia a imagem, são dadas as instrucões e espera-se que o usuário siga.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## O problema
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Na maior parte dos inputs o modelo que o Tesseract usa consegue ler corretamente os número impressos, porém em alguns momentos ele tem uma grande dificuldade de entender o 0, tentei diversos modelos diferentes e configuraćões e não consegui chegar em um resultado aceitavél.
+Ou seja, boa parte das leituras não ocorrem corretamente no ambiente controlado, imagine com diversos inputs e com qualidade inferior.
+Um ponto futuro para esse projeto funcionar corretamente era treinar com os dados específicos o tesseract, porém vai muito pro lado de IA/ML que no momento não tenho interesse, mas eventualmente espero retornar ao projeto para fazer isso.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

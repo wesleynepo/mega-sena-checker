@@ -9,10 +9,10 @@ export const Panel = ({ children }: PanelProps) => {
     <Flex
       alignItems="center"
       flexDir="column"
-      borderRadius="50px"
+      borderRadius="0.75em"
       bgColor="#D9D9D9"
-      width="80%"
-      height="80%"
+      px={{ base: '0.5em', md: '2em' }}
+      pb="1em"
     >
       {children}
     </Flex>

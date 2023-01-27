@@ -31,8 +31,7 @@ export const handleGame = async (
 
     games.push({
       prefix: String.fromCharCode(i + 65),
-      plays: plays,
-      winningCounts: plays.filter((f) => f.drawn).length
+      plays: plays
     })
   }
 
@@ -42,7 +41,6 @@ export const handleGame = async (
 export type Game = {
   prefix: string
   plays: Play[]
-  winningCounts: number
 }
 
 type Play = {

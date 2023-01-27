@@ -21,7 +21,7 @@ export const Home = ({ inputRef, contest }: HomeProps) => {
         mb="4rem"
         letterSpacing="-0.09em"
       >
-        Verificador Mega Sena
+        Verificador <br /> Mega Sena
       </Text>
       <Text
         fontSize="1rem"

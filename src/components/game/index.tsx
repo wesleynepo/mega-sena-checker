@@ -6,14 +6,14 @@ type GameResultProps = {
 }
 
 export const GameResult = ({ game }: GameResultProps) => {
-  const { prefix, winningCounts, plays } = game
+  const { prefix, plays } = game
   return (
-    <HStack mt="5px">
+    <HStack mt="0.5em" pt="0.5em">
       <Text
-        minW="50px"
+        minW="1em"
         fontWeight="600"
         color="#006BAE"
-        fontSize="36px"
+        fontSize={{ base: '1em', md: '2em' }}
         px="10px"
         textAlign="center"
       >
@@ -24,27 +24,15 @@ export const GameResult = ({ game }: GameResultProps) => {
           <Circle
             key={guess}
             color="white"
-            size="50px"
+            size="1.5em"
             fontWeight="bold"
-            fontSize="28px"
+            fontSize={{ base: '1.25em', md: '2em' }}
             bgColor={drawn ? '#006BAE' : '#5897BE'}
           >
             {guess}
           </Circle>
         )
       })}
-      {winningCounts > 3 && (
-        <Text
-          minW="50px"
-          fontWeight="600"
-          color="#006BAE"
-          fontSize="36px"
-          px="10px"
-          textAlign="center"
-        >
-          {winningCounts} acertos
-        </Text>
-      )}
     </HStack>
   )
 }
