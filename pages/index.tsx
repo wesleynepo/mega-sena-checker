@@ -1,10 +1,11 @@
 import Head from 'next/head'
 import { useRef, useState } from 'react'
-import { Flex, Box } from '@chakra-ui/react'
+import { Box, Flex, Spacer, VStack } from '@chakra-ui/react'
 import * as Content from '@/components/home'
 import { getLatestLottery, LatestLotteryResponse } from '@/services/caixa'
 import { Result } from '@/components/result'
 import { Crop } from '@/components/crop'
+import { Author } from '@/components/author'
 
 export async function getStaticProps() {
   const latestLottery = await getLatestLottery()
@@ -55,20 +56,24 @@ export default function Home({ contest, drawn }: HomeProps) {
             onChange={handleFileChange}
             hidden
           />
-          <Flex
+          <VStack
             height="100%"
             alignItems="center"
             display="flex"
             justifyContent="center"
+            pt="2em"
           >
-            {fileCropped.length > 0 ? (
-              <Result file={fileCropped} onBack={clearAll} drawn={drawn} />
-            ) : file.length > 0 ? (
-              <Crop file={file} setCropped={setFileCropped} />
-            ) : (
-              <Content.Home inputRef={inputFile} contest={contest} />
-            )}
-          </Flex>
+            <Flex height="90%" alignItems="center">
+              {fileCropped.length > 0 ? (
+                <Result file={fileCropped} onBack={clearAll} drawn={drawn} />
+              ) : file.length > 0 ? (
+                <Crop file={file} setCropped={setFileCropped} />
+              ) : (
+                <Content.Home inputRef={inputFile} contest={contest} />
+              )}
+            </Flex>
+            <Author />
+          </VStack>
         </Box>
       </main>
     </>
